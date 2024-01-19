@@ -1,1 +1,28 @@
-project.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bootstrap-projects
+  namespace: argocd-cytric-travel-tst
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/GhodkiS/argocd.git
+        revision: main
+        directories:
+          - path: bootstrap/projects/*
+  template:
+    metadata:
+      name: bootstrap-{{path.basename}}
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/GhodkiS/argocd.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        name: in-cluster
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
