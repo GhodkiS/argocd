@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: selenium
+  namespace: default
+  labels: {}
+spec:
+  project: poc
+  sources:
+    - repoURL: https://github.com/GhodkiS/argocd.git
+      chart: selenium-grid
+      targetRevision: 0.26.4
+      helm:
+        releaseName: selenium-grid
+        valueFiles:
+          - $values/projects/values/selenium-global-values.yaml
+          - $values/projects/poc/apps/jdopa-47/selenium-values.yaml
+    - repoURL: https://github.com/GhodkiS/argocd.git
+      targetRevision: main
+      ref: values
+  destination:
+    name: tst-we-cytr01
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - FailOnSharedResource=true
+      - ApplyOutOfSyncOnly=true
