@@ -1,0 +1,13 @@
+project: default
+source:
+  repoURL: https://github.com/GhodkiS/argocd.git
+  path: bootstrap
+  targetRevision: main
+destination:
+  namespace: default
+  name: in-cluster
+syncPolicy:
+  automated:
+    selfHeal: true
+  syncOptions:
+    - Prune=true
